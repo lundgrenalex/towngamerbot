@@ -14,9 +14,9 @@ services:
     tty: true
   mongodb:
     image: "mongo:latest"
-  ports:
-    - "27017:27017"
-    command: mongod --smallfiles --logpath=/dev/null
+    ports:
+      - "27017:27017"
+    command: ["mongod", "--smallfiles", "--logpath=/dev/null"]
   migration:
     image: cities_bot:latest
     command: ["python3", "migration/mongo.py"]
