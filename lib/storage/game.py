@@ -57,14 +57,13 @@ def get_new_answer(message: dict):
     last_simbol = list(city_name)[-1:][0]
     last_answers = db.bot.game.find({'chat_id': message['message']['chat']['id']})
     last_answers = [a['message'] for a in last_answers]
-    # TODO: MORE RANDOM
-    cities = db.bot.cities.find_one({'$and': [
+    cities = db.bot.cities.find({'$and': [
         {'city': {'$regex': f'^{last_simbol}', '$options' : 'i'}},
         {'city': {'$nin': last_answers}}
     ]})
-    cities = [c['city'] for c in cities]
     try:
-        return (answer['city']).lower()
+        cities = [c['city'] for c in cities]
+        return random.choice(cities)
     except TypeError:
         return False
 
