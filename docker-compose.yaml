@@ -12,8 +12,3 @@ services:
     tty: true
   mongodb:
     image: "mongo:latest"
-  migration:
-    image: cities_bot:latest
-    command: ["python3", "./migration/mongo.py"]
-    depends_on:
-     - mongodb
