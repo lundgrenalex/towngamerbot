@@ -7,8 +7,6 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    ports:
-      - "8092:8092"
     depends_on:
       - mongodb
     links:
@@ -17,7 +15,7 @@ services:
   mongodb:
     image: "mongo:latest"
   ports:
-    - 27017:27017
+    - "27017:27017"
     command: mongod --smallfiles --logpath=/dev/null
   migration:
     image: cities_bot:latest
