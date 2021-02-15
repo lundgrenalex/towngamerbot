@@ -44,6 +44,7 @@ def start(message: dict):
         return
 
     chat_id = message['message']['chat']['id']
+
     if game.exists(message):
         telegram.send_message(
             chat_id,
@@ -55,13 +56,15 @@ def start(message: dict):
     city = cities.get_random()
 
     # send_message
-    telegram.send_message(
+    result = telegram.send_message(
         chat_id,
         message=city.capitalize(),
         bot_token=telegram_key
     )
+    logging.info(result)
 
     # write bot answer
-    game.save_bot_answer(result)
-    
+    result = game.save_bot_answer(result)
+    logging.info(result)
+
     return
