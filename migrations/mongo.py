@@ -3,7 +3,7 @@ from pymongo import MongoClient, ASCENDING, DESCENDING
 db = MongoClient('mongodb://localhost:27017')
 
 # CITIES
-db.bot.cities.remove({})
+db.bot.cities.delete_many({})
 
 with open('./data/cities.json', 'r') as city_file:
     fixed_cities = []
