@@ -9,13 +9,9 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - mongodb
-    links:
-      - mongodb
     tty: true
   mongodb:
     image: "mongo:latest"
-    #ports:
-    #  - "27017:27017"
   migration:
     image: cities_bot:latest
     command: ["python3", "migration/mongo.py"]

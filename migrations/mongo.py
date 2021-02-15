@@ -1,6 +1,6 @@
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
-db = MongoClient('mongodb://mongodb:27017')
+db = MongoClient('mongodb://127.0.0.1:27017')
 
 # CITIES
 db.bot.cities.delete_many({})
