@@ -43,6 +43,13 @@ def start(message: dict):
     if not re.search(r'\/start', message['message']['text']):
         return
 
+    if game.exists(message):
+        telegram.send_message(
+            chat_id,
+            message='Вы еще не закончили последнюю игру, нажмите /stop или говорите город!',
+            bot_token=telegram_key)
+        return
+
     # Get random city
     city = cities.get_random()
 
