@@ -25,5 +25,6 @@ result.append(db.bot.game.create_index('date'))
 result.append(db.bot.game.create_index('chat_id'))
 result.append(db.bot.game.create_index('user_id'))
 result.append(db.bot.game.create_index('message'))
+result.append(db.bot.cities.create_index('city'))
 
 print(result)
