@@ -43,6 +43,7 @@ def start(message: dict):
     if not re.search(r'\/start', message['message']['text']):
         return
 
+    chat_id = message['message']['chat']['id']
     if game.exists(message):
         telegram.send_message(
             chat_id,
@@ -54,15 +55,13 @@ def start(message: dict):
     city = cities.get_random()
 
     # send_message
-    result = telegram.send_message(
-        message['message']['chat']['id'],
+    telegram.send_message(
+        chat_id,
         message=city.capitalize(),
         bot_token=telegram_key
     )
-    logging.info(result)
 
     # write bot answer
-    result = game.save_bot_answer(result)
-    logging.info(result)
-
+    game.save_bot_answer(result)
+    
     return
