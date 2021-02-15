@@ -1,0 +1,15 @@
+.env/bin/activate
+*.pyc
+__pycache__
+pyenv.cfg
+.*
+!/.gitignore
+!/.gitkeep
+!/*/.gitkeep
+!/.gitlab-ci.yml
+!/.coveragerc
+
+.cache
+tmp/*
+logs/*.log
+.env/

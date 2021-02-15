@@ -1,0 +1,21 @@
+version: '3'
+services:
+  cities_bot:
+    image: cities_bot
+    environment:
+      APP: app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8092:8092"
+    depends_on:
+      - mongodb
+    tty: true
+  mongodb:
+    image: "mongo:latest"
+  migration:
+    image: cities_bot:latest
+    command: ["python3", "migration/mongo.py"]
+    depends_on:
+     - mongodb
