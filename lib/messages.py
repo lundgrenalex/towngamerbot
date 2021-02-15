@@ -45,7 +45,7 @@ def bot_answer(message: dict):
 
     result = telegram.send_message(
         message['message']['chat']['id'],
-        message=bot_answer,
+        message=bot_answer.capitalize(),
         bot_token=telegram_key
     )
     logging.info(result)
