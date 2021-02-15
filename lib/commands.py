@@ -9,34 +9,6 @@ def process(message: dict):
     start(message)
     stop(message)
 
-def start_new_game(message: dict):
-    # Play?
-    reply_markup = {
-        'inline_keyboard': [[{
-            'text': 'Давай!',
-            'callback_data': "start_game"
-        }, {
-            'text': 'Не хочу!',
-            'callback_data': "decline_game"
-        }]]
-    }
-
-    params = {
-        'reply_markup': json.dumps(reply_markup)
-    }
-
-    result = telegram.send_message(
-        message['message']['chat']['id'],
-        message='Сыграем в города?',
-        params=params,
-        bot_token=telegram_key
-    )
-
-    logging.info(f'Feedback: {result}')
-
-    return
-
-
 def stop(message: dict):
 
     if not re.search(r'\/stop', message['message']['text']):
@@ -66,35 +38,6 @@ def stop(message: dict):
 
     return True
 
-
-def send_reset_game_invite(message: dict):
-
-    reply_markup = {
-        'inline_keyboard': [[{
-            'text': 'Сбросить!',
-            'callback_data': "drop_game"
-        }, {
-            'text': 'Продолжить играть!',
-            'callback_data': "skip_drop"
-        }]]
-    }
-
-    params = {
-        'reply_markup': json.dumps(reply_markup)
-    }
-
-    result = telegram.send_message(
-        message['message']['chat']['id'],
-        message='Сбросить игру?',
-        params=params,
-        bot_token=telegram_key
-    )
-
-    logging.info(f'Feedback: {result}')
-
-    return
-
-
 def start(message: dict):
 
     if not re.search(r'\/start', message['message']['text']):
@@ -106,7 +49,7 @@ def start(message: dict):
     # send_message
     result = telegram.send_message(
         message['message']['chat']['id'],
-        message=city,
+        message=city.capitalize(),
         bot_token=telegram_key
     )
     logging.info(result)
