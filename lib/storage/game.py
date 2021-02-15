@@ -65,7 +65,7 @@ def get_new_answer(message: dict):
     try:
         cities = [c['city'] for c in cities]
         return random.choice(cities)
-    except TypeError:
+    except (TypeError, IndexError):
         return False
 
 def get_score(chat_id: int) -> int:
