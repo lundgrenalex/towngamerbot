@@ -57,10 +57,12 @@ def get_new_answer(message: dict):
     last_simbol = list(city_name)[-1:][0]
     last_answers = db.bot.game.find({'chat_id': message['message']['chat']['id']})
     last_answers = [a['message'] for a in last_answers]
-    answer = db.bot.cities.find_one({'$and': [
+    # TODO: MORE RANDOM
+    cities = db.bot.cities.find_one({'$and': [
         {'city': {'$regex': f'^{last_simbol}', '$options' : 'i'}},
         {'city': {'$nin': last_answers}}
     ]})
+    cities = [c['city'] for c in cities]
     try:
         return (answer['city']).lower()
     except TypeError:
