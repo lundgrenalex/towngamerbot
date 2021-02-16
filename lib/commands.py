@@ -8,6 +8,7 @@ import logging
 def process(message: dict):
     start(message)
     stop(message)
+    hint(message)
 
 def stop(message: dict):
 
@@ -66,5 +67,17 @@ def start(message: dict):
     # write bot answer
     result = game.save_bot_answer(result)
     logging.info(result)
+
+    return
+
+def hint(message: dict):
+
+    if not re.search(r'\/hint', message['message']['text']):
+        return
+
+    # get last message
+    # 
+
+    logging.info(message)
 
     return

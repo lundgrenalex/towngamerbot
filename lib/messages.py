@@ -69,8 +69,11 @@ def process_message(message: dict):
     # get chat_id
     chat_id = message['message']['chat']['id']
 
+    # get current city
+    city = message['message']['text']
+
     # dirty words
-    if helpers.check_obscenity(message['message']['text']):
+    if helpers.check_obscenity(city):
         telegram.send_message(
             chat_id,
             message='Не ругайся матом тупая ты скотина!',
@@ -106,19 +109,12 @@ def process_message(message: dict):
         logging.warning(err_msg)
         return False
 
-    # get current city
-    city = (message['message']['text']).lower()
-
-    # Get city list
-    all_cities = cities.get_all()
-
-    # Check if city exists
-    if city not in all_cities:
+    # city exists
+    if not cities.city_exists(city):
         result = telegram.send_message(
             chat_id,
             message=f'Города {city} не существует!',
-            bot_token=telegram_key
-        )
+            bot_token=telegram_key)
         logging.debug(f'Wrong city: {city}')
         return False
 

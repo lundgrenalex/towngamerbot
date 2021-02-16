@@ -18,7 +18,7 @@ def save_bot_answer(answer: dict):
         'date': time.time(),
         'chat_id': answer['result']['chat']['id'],
         'user_id': answer['result']['from']['id'],
-        'message': answer['result']['text'],
+        'message': answer['result']['text'].lower(),
     })
 
 def save_user_answer(message: dict):
@@ -27,7 +27,7 @@ def save_user_answer(message: dict):
         'date': time.time(),
         'chat_id': message['message']['chat']['id'],
         'user_id': message['message']['from']['id'],
-        'message': message['message']['text'],
+        'message': message['message']['text'].lower(),
     })
 
 def cancel(chat_id: int):
@@ -38,12 +38,11 @@ def is_answered_city(message: dict):
     db = mongo.connect()
     return db.bot.game.find_one({
         'chat_id': message['message']['chat']['id'],
-        'message': message['message']['text'],
+        'message': message['message']['text'].lower(),
     })
 
 def get_last_answer(message: dict):
     db = mongo.connect()
-    print(message['message']['chat']['id'])
     messages = db.bot.game.find({
         'chat_id': message['message']['chat']['id'],
     }, {'_id': False}).sort([('date', pymongo.DESCENDING)])
