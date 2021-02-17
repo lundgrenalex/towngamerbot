@@ -6,21 +6,18 @@ db = MongoClient('mongodb://mongodb:27017')
 # CITIES
 db.bot.cities.delete_many({})
 
-def get_unique_cities(cities: list) -> list:
-    unique_cities = []
-    for c in cities:
-        if c not in unique_cities:
-            unique_cities.append(c)
-    return unique_cities
-
-def prepare_cities(cities: list) -> list:
-    cities = [c['city'] for c in cities]
-    cities = get_unique_cities(cities)
-    return [{'city': c} for c in cities]
-
-with open('./data/cities.json', 'r') as city_file:
-    fixed_cities = []
-    cities = json.loads(city_file.read())
+with open('./data/cities.csv', 'r') as city_file:
+    city_lines = city_file.readlines()
+    cities = []
+    for cl in city_lines:
+        cl = cl.replace('\n', '').split(';')
+        city = {
+            'city': cl[0],
+            'state': cl[1],
+            'region': cl[2],
+            'population': cl[3],
+        }
+        cities.append(city)
     db.bot.cities.insert_many(prepare_cities(cities))
 
 cities = db.bot.cities.distinct('city')

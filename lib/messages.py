@@ -46,8 +46,7 @@ def bot_answer(message: dict):
     result = telegram.send_message(
         message['message']['chat']['id'],
         message=bot_answer.capitalize(),
-        bot_token=telegram_key
-    )
+        bot_token=telegram_key)
     logging.info(result)
 
     # write bot answer
@@ -104,8 +103,7 @@ def process_message(message: dict):
         result = telegram.send_message(
             chat_id,
             message=err_msg,
-            bot_token=telegram_key
-        )
+            bot_token=telegram_key)
         logging.warning(err_msg)
         return False
 
@@ -123,8 +121,7 @@ def process_message(message: dict):
         result = telegram.send_message(
             chat_id,
             message=f'Город {city} уже использовали в ответах!',
-            bot_token=telegram_key
-        )
+            bot_token=telegram_key)
         logging.info(f'Answered city: {city}')
         return False
 

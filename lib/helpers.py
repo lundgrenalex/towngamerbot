@@ -19,5 +19,5 @@ def render_template(template_name: str, *args) -> str:
         return (template_file.read()).format(*args)
 
 def check_obscenity(text: str) -> bool:
-    obscenity_regex = r'(хуй|пизд|ебать|еблан|мудак)'
+    obscenity_regex = r'(хуй|пизд|ебать|еблан|мудак|блять)'
     return True if re.search(obscenity_regex, text) else False
