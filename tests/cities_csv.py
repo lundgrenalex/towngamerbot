@@ -12,4 +12,3 @@ with open('./data/cities.csv', 'r') as city_file:
             'population': cl[3],
         }
         cities.append(city)
-        print(city)

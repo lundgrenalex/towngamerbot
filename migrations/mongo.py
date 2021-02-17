@@ -18,7 +18,7 @@ with open('./data/cities.csv', 'r') as city_file:
             'population': cl[3],
         }
         cities.append(city)
-    db.bot.cities.insert_many(prepare_cities(cities))
+    db.bot.cities.insert_many(cities)
 
 cities = db.bot.cities.distinct('city')
 print(cities)
