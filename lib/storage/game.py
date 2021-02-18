@@ -60,7 +60,7 @@ def get_new_answer(message: dict):
     cities = db.bot.cities.find({
         'city': {
             '$regex': f'^{last_simbol}',
-            '$options' : 'i'}}).sort('population', pymongo.DESCENDING)]).limit()
+            '$options' : 'i'}}).sort([('population', pymongo.DESCENDING)]).limit()
     try:
         cities = [c['city'] for c in cities][0]
         return cities[0]
