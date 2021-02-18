@@ -63,7 +63,8 @@ def get_new_answer(message: dict):
             '$regex': f'^{last_simbol}',
             '$options' : 'i'}}).sort([('population', pymongo.DESCENDING)]).limit(2)
     try:
-        return [c['city'] for c in cities][0]
+        for city in cities:
+            return city['city']
     except (TypeError, IndexError):
         return False
 
