@@ -6,8 +6,7 @@ from lib.storage import mongo
 def get_random():
     db = mongo.connect()
     cities = db.bot.cities.distinct('city')
-    cities = [c.lower() for c in cities]
-    return random.choice(cities)
+    return random.choice([c for c in cities])
 
 def get_all():
     db = mongo.connect()

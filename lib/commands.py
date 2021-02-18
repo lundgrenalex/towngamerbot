@@ -59,7 +59,7 @@ def start(message: dict):
     # send_message
     result = telegram.send_message(
         chat_id,
-        message=city.capitalize(),
+        message=city,
         bot_token=telegram_key
     )
     logging.info(result)
@@ -76,7 +76,7 @@ def hint(message: dict):
         return
 
     # get last message
-    # 
+    #
 
     logging.info(message)
 
