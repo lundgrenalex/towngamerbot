@@ -39,7 +39,7 @@ def is_answered_city(message: dict):
     return db.bot.game.find_one({
         'chat_id': message['message']['chat']['id'],
         'message': {
-            '$regex': f'^{ message['message']['text']}',
+            '$regex': f"^{message['message']['text']}",
             '$options' : 'i'
         }
     })
@@ -60,7 +60,7 @@ def get_new_answer(message: dict):
     cities = db.bot.cities.find({
         'city': {
             '$regex': f'^{last_simbol}',
-            '$options' : 'i'}}).sort('population', pymongo.DESCENDING)]).limit(1)
+            '$options' : 'i'}}).sort('population', pymongo.DESCENDING)]).limit()
     try:
         cities = [c['city'] for c in cities][0]
         return cities[0]
