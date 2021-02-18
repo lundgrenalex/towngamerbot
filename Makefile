@@ -9,4 +9,4 @@ stop: docker-compose down
 
 restart: stop start
 
-deploy: update; docker-compose build; start
+deploy: update; docker-compose build; docker-compose up -d;

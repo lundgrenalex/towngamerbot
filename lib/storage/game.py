@@ -56,7 +56,7 @@ def get_last_answer(message: dict):
 
 def get_new_answer(message: dict):
     db = mongo.connect()
-    city_name = message['message']['text']
+    city_name = helpers.normalize_city_name(message['message']['text'])
     last_simbol = list(city_name)[-1:][0]
     cities = db.bot.cities.find({
         'city': {
