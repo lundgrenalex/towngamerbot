@@ -1,4 +1,12 @@
-from lib import helpers
+import unittest
+from lib.storage import cities
 
-city_result = helpers.is_word_in_chain('верхняя сысерть', 'тверь')
-print(city_result)
+
+class TestStringMethods(unittest.TestCase):
+
+    def test_get_random(self):
+        random_city = cities.get_random()
+        self.assertEqual(type(random_city), str)
+
+if __name__ == '__main__':
+    unittest.main()
