@@ -2,6 +2,8 @@ import re
 
 def is_word_in_chain(first_word: str, second_word: str) -> bool:
     stop_symbols = ['ы', 'ь', 'ё', 'ъ']
+    first_word = first_word.lower()
+    second_word = second_word.lower()
     for stsm in stop_symbols:
         first_word = first_word.replace(stsm, '')
     fw_chain = list(first_word)

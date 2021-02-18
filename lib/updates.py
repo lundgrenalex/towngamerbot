@@ -9,6 +9,7 @@ def process(updates: list):
     for message in updates:
 
         if 'message' in message:
+            logging.info(message)
             messages.process(message)
             continue
 

@@ -20,7 +20,7 @@ def process(message: dict):
         return
     process_message(message)
 
-def bot_answer(message: dict):
+def send_bot_answer(message: dict):
 
     chat_id = message['message']['chat']['id']
 
@@ -45,7 +45,7 @@ def bot_answer(message: dict):
 
     result = telegram.send_message(
         message['message']['chat']['id'],
-        message=bot_answer.capitalize(),
+        message=bot_answer,
         bot_token=telegram_key)
     logging.info(result)
 
@@ -59,17 +59,15 @@ def bot_answer(message: dict):
 
 def process_message(message: dict):
 
-    # BUGFIX: to lower text
-    message['message']['text'] = (message['message']['text']).lower()
-
-    # BUGFIX: FIX Ёё
-    message['message']['text'] = (message['message']['text']).replace('ё', 'е')
-
     # get chat_id
     chat_id = message['message']['chat']['id']
 
     # get current city
     city = message['message']['text']
+
+    # Checing bot
+    if message['message']['from']['is_bot']:
+        return False
 
     # dirty words
     if helpers.check_obscenity(city):
@@ -87,15 +85,16 @@ def process_message(message: dict):
             bot_token=telegram_key)
         return False
 
-    # get last message
+    # get last answer
     last_answer = game.get_last_answer(message)
-    if not last_answer:
-        logging.warning(f'Не найден последний ответ в чате: {chat_id}')
-        return False
 
-    # last_answer uid =! uid
-    if last_answer['user_id'] == message['message']['from']['id']:
-        return bot_answer(message)
+    # check prevoius answers
+    if game.is_answered_city(message):
+        result = telegram.send_message(
+            chat_id,
+            message=f'Город {city} уже использовали в ответах!',
+            bot_token=telegram_key)
+        return False
 
     # check last symbol from last answer
     if not helpers.is_word_in_chain(last_answer['message'], message['message']['text']):
@@ -104,7 +103,6 @@ def process_message(message: dict):
             chat_id,
             message=err_msg,
             bot_token=telegram_key)
-        logging.warning(err_msg)
         return False
 
     # city exists
@@ -113,22 +111,12 @@ def process_message(message: dict):
             chat_id,
             message=f'Города {city} не существует!',
             bot_token=telegram_key)
-        logging.debug(f'Wrong city: {city}')
         return False
 
-    # check prevoius answers
-    if game.is_answered_city(message):
-        result = telegram.send_message(
-            chat_id,
-            message=f'Город {city} уже использовали в ответах!',
-            bot_token=telegram_key)
-        logging.info(f'Answered city: {city}')
-        return False
+    print('I"m here!')
 
     # save user answer
-    if not game.save_user_answer(message):
-        logging.info(f'Can\'t write city to database: {city}')
-        return False
+    game.save_user_answer(message)
 
-    # get bot answer
-    return bot_answer(message)
+    # send bot answer
+    send_bot_answer(message)

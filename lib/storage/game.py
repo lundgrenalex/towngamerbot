@@ -4,6 +4,7 @@ from lib.storage import mongo
 from lib import helpers
 import time
 import re
+import logging
 
 
 def exists(message: dict):
@@ -18,7 +19,7 @@ def save_bot_answer(answer: dict):
         'date': time.time(),
         'chat_id': answer['result']['chat']['id'],
         'user_id': answer['result']['from']['id'],
-        'message': answer['result']['text'].lower(),
+        'message': answer['result']['text'],
     })
 
 def save_user_answer(message: dict):
@@ -27,7 +28,7 @@ def save_user_answer(message: dict):
         'date': time.time(),
         'chat_id': message['message']['chat']['id'],
         'user_id': message['message']['from']['id'],
-        'message': message['message']['text'].lower(),
+        'message': message['message']['text'],
     })
 
 def cancel(chat_id: int):
@@ -36,37 +37,42 @@ def cancel(chat_id: int):
 
 def is_answered_city(message: dict):
     db = mongo.connect()
-    return db.bot.game.find_one({
+    result = db.bot.game.find_one({
         'chat_id': message['message']['chat']['id'],
         'message': {
-            '$regex': f"^{message['message']['text']}",
+            '$regex': f"{message['message']['text']}",
             '$options' : 'i'
         }
     })
+    return result
 
 def get_last_answer(message: dict):
     db = mongo.connect()
     messages = db.bot.game.find({
         'chat_id': message['message']['chat']['id'],
-    }, {'_id': False}).sort([('date', pymongo.DESCENDING)])
-    try:
-        return [m for m in messages][0]
-    except IndexError:
-        return False
+    }, {'_id': False}).sort([('date', pymongo.DESCENDING)]).limit(1)
+    return [m for m in messages][0]
 
 def get_new_answer(message: dict):
     db = mongo.connect()
+    chat_id = message['message']['chat']['id']
     city_name = helpers.normalize_city_name(message['message']['text'])
+
     last_simbol = list(city_name)[-1:][0]
     cities = db.bot.cities.find({
         'city': {
             '$regex': f'^{last_simbol}',
-            '$options' : 'i'}}).sort([('population', pymongo.ASCENDING)]).limit(2)
-    try:
-        for city in cities:
-            return city['city']
-    except (TypeError, IndexError):
-        return False
+            '$options' : 'i'
+    }}).sort([('population', pymongo.DESCENDING)])
+
+    # get answered cities
+    answered_cities = db.bot.game.find({'chat_id': chat_id})
+    answered_cities = [c['message'].lower() for c in answered_cities]
+
+    for city in cities:
+        if city['city'].lower() in answered_cities:
+            continue
+        return city['city']
 
 def get_score(chat_id: int) -> int:
     db = mongo.connect()

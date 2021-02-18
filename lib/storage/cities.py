@@ -1,4 +1,5 @@
 import random
+import logging
 from lib.storage import mongo
 
 
