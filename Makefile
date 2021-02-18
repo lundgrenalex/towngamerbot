@@ -1,12 +1,14 @@
 update:
-	git pull
+	git pull;
 
-build: update; docker-compose build
+build: docker-compose build --parallel --compress;
 
-start: docker-compose up -d
+start:
+	docker-compose up -d --remove-orphans;
 
-stop: docker-compose down
+stop:
+	docker-compose down;
 
 restart: stop start
 
-deploy: update; docker-compose build; docker-compose up -d;
+deploy: update; docker-compose build --parallel --compress; docker-compose up -d --remove-orphans;
