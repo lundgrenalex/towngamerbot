@@ -3,9 +3,6 @@ env/bin/activate
 *.pyc
 *.log
 __pycache__
-lib
-lib64
-bin
 include
 share
 pyenv.cfg
