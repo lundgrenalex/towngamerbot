@@ -74,6 +74,13 @@ def get_new_answer(message: dict):
             continue
         return city['city']
 
+def get_hint(message: dict):
+    db = mongo.connect()
+    city_name = get_new_answer(message)
+    city_info = db.bot.cities.find_one({'city': city_name})
+    hint = f"Город из {len(city_info['city'])} букв, располежнный в {city_info['state']} {city_info['region']} региона с население из {city_info['population']} человек"
+    return hint
+
 def get_score(chat_id: int) -> int:
     db = mongo.connect()
     score = 0

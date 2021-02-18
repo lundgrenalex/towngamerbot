@@ -76,8 +76,9 @@ def hint(message: dict):
         return
 
     # get last message
-    #
+    last_answer = game.get_last_answer(message)
 
-    logging.info(message)
+    # get hint
+    hint = game.get_hint(message)
 
-    return
+    return telegram.send_message(chat_id, message=hint, bot_token=telegram_key)
