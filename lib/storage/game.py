@@ -1,6 +1,7 @@
 import pymongo
 import random
 from lib.storage import mongo
+from lib.storage.exceptions import GameError
 from lib import helpers
 import time
 import re
@@ -86,13 +87,6 @@ def get_hint(message: dict):
         raise GameError(message="Game don't exists")
 
     return 'Game exists!'
-
-    #city_name = get_new_answer(message)
-    #print(city_name)
-    #city_info = db.bot.cities.find_one({'city': city_name})
-    #hint = f"Город из {len(city_info['city'])} букв, располежнный в {city_info['state']} {city_info['region']} региона с население из {city_info['population']} человек"
-
-    #return hint
 
 def get_score(chat_id: int) -> int:
     db = mongo.connect()
