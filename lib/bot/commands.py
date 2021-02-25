@@ -4,6 +4,7 @@ import logging
 from lib import helpers
 from .game import cities
 from .game import CityGame
+from lib.messages.chat import Chat
 
 
 def process(message: dict):
