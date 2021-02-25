@@ -4,7 +4,6 @@ import logging
 from lib import helpers
 from .game import cities
 from .game import CityGame
-from lib.messages.chat import Chat
 
 
 def process(message: dict):
@@ -17,20 +16,19 @@ def stop(message: dict) -> None:
     if not re.search(r'\/stop', message['message']['text']):
         return
 
-    g = CityGame(message=message)
-    chat = Chat(chat_id=message['message']['chat']['id'])
+    game = CityGame(message=message)
 
-    if not g.exists():
-        chat.message('Вы еще не начали, нажмите /start чтобы начать играть в города!')
+    if not game.exists():
+        game.chat.message('Вы еще не начали, нажмите /start чтобы начать играть в города!')
         return
 
     # Get score for username and send message
-    score = int(g.get_score() * 0.75)
-    chat.message(helpers.render_template(
+    score = int(game.get_score() * 0.75)
+    game.chat.message(helpers.render_template(
         'stopped', message['message']['chat']['username'], score))
 
     # Cancel game
-    g.cancel()
+    game.cancel()
 
 
 def start(message: dict):
@@ -38,22 +36,21 @@ def start(message: dict):
     if not re.search(r'\/start', message['message']['text']):
         return
 
-    g = CityGame(message=message)
-    chat = Chat(chat_id=message['message']['chat']['id'])
+    game = CityGame(message=message)
 
-    if g.exists():
-        chat.message('Вы еще не закончили последнюю игру, нажмите /stop или говорите город!')
+    if game.exists():
+        game.chat.message('Вы еще не закончили последнюю игру, нажмите /stop или говорите город!')
         return
 
     # Get random city
     city = cities.get_random()
 
     # send_message
-    result = chat.message(city)
+    result = game.chat.message(city)
     logging.info(result)
 
     # write bot answer
-    result = g.save_bot_answer(result)
+    result = game.save_bot_answer(result)
     logging.info(result)
 
     return
@@ -63,7 +60,6 @@ def hint(message: dict):
     if not re.search(r'\/hint', message['message']['text']):
         return
 
-    g = CityGame(message=message)
-    chat = Chat(chat_id=message['message']['chat']['id'])
+    game = CityGame(message=message)
 
-    return chat.message(g.get_hint())
+    return game.chat.message(game.get_hint())

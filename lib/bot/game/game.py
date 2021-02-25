@@ -1,6 +1,7 @@
 import pymongo
 import random
 from lib.storage import mongo
+from .chat import Chat
 from .exceptions import GameError
 from lib import helpers
 import time
@@ -12,6 +13,7 @@ class CityGame:
     def __init__(self, message:dict):
         self.message = message
         self.db = mongo.connect()
+        self.chat = Chat(chat_id=message['message']['chat']['id'])
 
     def exists(self,):
         return self.db.bot.game.find_one({

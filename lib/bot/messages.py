@@ -3,7 +3,6 @@ from . import commands
 from .game import cities
 from .game import CityGame
 from lib import helpers
-from lib.messages.chat import Chat
 
 
 def is_command(message: dict) -> bool:
@@ -22,30 +21,27 @@ def process(message: dict):
 
 def send_bot_answer(message: dict):
 
-    chat_id = message['message']['chat']['id']
+    game = CityGame(message=message)
 
-    g = CityGame(message=message)
-    chat = Chat(chat_id=message['message']['chat']['id'])
-
-    bot_answer = g.get_new_answer()
+    bot_answer = game.get_new_answer()
     if not bot_answer:
 
         # Get score for username
-        chat.message(
+        game.chat.message(
             helpers.render_template(
                 'winner',
                 message['message']['chat']['username'],
-                g.get_score()))
+                game.get_score()))
 
         # Cancel game
-        g.cancel()
+        game.cancel()
 
         return False
 
-    result = chat.message(bot_answer)
+    result = game.chat.message(bot_answer)
 
     # write bot answer
-    result = g.save_bot_answer(result)
+    result = game.save_bot_answer(result)
     logging.info(result)
 
     return True
@@ -54,9 +50,7 @@ def send_bot_answer(message: dict):
 def process_message(message: dict):
 
     # init Game
-    g = CityGame(message=message)
-
-    chat = Chat(chat_id=message['message']['chat']['id'])
+    game = CityGame(message=message)
 
     # get current city
     city = message['message']['text']
@@ -67,35 +61,35 @@ def process_message(message: dict):
 
     # dirty words
     if helpers.check_obscenity(city):
-        chat.message('Не ругайся матом тупая ты скотина!')
+        game.chat.message('Не ругайся матом тупая ты скотина!')
         return False
 
     # game exists
-    if not g.exists():
-        chat.message('Вы еще не начали, нажмите /start чтобы поиграть в города!')
+    if not game.exists():
+        game.chat.message('Вы еще не начали, нажмите /start чтобы поиграть в города!')
         return False
 
     # get last answer
-    last_answer = g.get_last_answer()
+    last_answer = game.get_last_answer()
 
     # check prevoius answers
-    if g.is_answered_city():
-        chat.message(f'Город {city} уже использовали в ответах!')
+    if game.is_answered_city():
+        game.chat.message(f'Город {city} уже использовали в ответах!')
         return False
 
     # check last symbol from last answer
-    if not helpers.is_word_in_chain(last_answer['message'], message['message']['text']):
+    if not helpers.is_word_in_chain(last_answer['message'], city):
         err_msg = f"Ваш город {message['message']['text']} не начинается с последнего символа предыдущего города {last_answer['message']} из ответов"
-        chat.message(err_msg)
+        game.chat.message(err_msg)
         return False
 
     # city exists
     if not cities.city_exists(city):
-        chat.message(f'Города {city} не существует!')
+        game.chat.message(f'Города {city} не существует!')
         return False
 
     # save user answer
-    g.save_user_answer()
+    game.save_user_answer()
 
     # send bot answer
     send_bot_answer(message)
