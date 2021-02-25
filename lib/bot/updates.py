@@ -1,6 +1,5 @@
-from lib import telegram as tg
-from config import telegram_key
-from lib import callbacks, messages
+from . import callbacks
+from . import messages
 import logging
 
 
