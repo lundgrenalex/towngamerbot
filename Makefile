@@ -3,7 +3,8 @@ VIRTUALENV_NAME=.env
 update:
 	git pull;
 
-build: docker-compose build --parallel --compress;
+build:
+	docker-compose build --parallel --compress;
 
 start:
 	docker-compose up -d --remove-orphans;
