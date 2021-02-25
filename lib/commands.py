@@ -10,7 +10,7 @@ def process(message: dict):
     stop(message)
     hint(message)
 
-def stop(message: dict):
+def stop(message: dict) -> None:
 
     if not re.search(r'\/stop', message['message']['text']):
         return
@@ -24,7 +24,7 @@ def stop(message: dict):
             chat_id,
             message='Вы еще не начали, нажмите /start чтобы начать играть в города!',
             bot_token=telegram_key)
-        return False
+        return
 
     # Get score for username
     score = int(game.get_score(chat_id) * 0.75)
@@ -37,7 +37,6 @@ def stop(message: dict):
     # Cancel game
     game.cancel(chat_id)
 
-    return True
 
 def start(message: dict):
 
@@ -60,8 +59,7 @@ def start(message: dict):
     result = telegram.send_message(
         chat_id,
         message=city,
-        bot_token=telegram_key
-    )
+        bot_token=telegram_key)
     logging.info(result)
 
     # write bot answer
@@ -75,10 +73,7 @@ def hint(message: dict):
     if not re.search(r'\/hint', message['message']['text']):
         return
 
-    # get last message
-    last_answer = game.get_last_answer(message)
-
-    # get hint
-    hint = game.get_hint(message)
-
-    return telegram.send_message(chat_id, message=hint, bot_token=telegram_key)
+    return telegram.send_message(
+        chat_id,
+        message=game.get_hint(message),
+        bot_token=telegram_key)

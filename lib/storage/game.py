@@ -51,7 +51,10 @@ def get_last_answer(message: dict):
     messages = db.bot.game.find({
         'chat_id': message['message']['chat']['id'],
     }, {'_id': False}).sort([('date', pymongo.DESCENDING)]).limit(1)
-    return [m for m in messages][0]
+    try:
+        return [m for m in messages][0]
+    except IndexError:
+        return False
 
 def get_new_answer(message: dict):
     db = mongo.connect()
@@ -75,11 +78,21 @@ def get_new_answer(message: dict):
         return city['city']
 
 def get_hint(message: dict):
+
     db = mongo.connect()
-    city_name = get_new_answer(message)
-    city_info = db.bot.cities.find_one({'city': city_name})
-    hint = f"Город из {len(city_info['city'])} букв, располежнный в {city_info['state']} {city_info['region']} региона с население из {city_info['population']} человек"
-    return hint
+
+    game_exists = exists(message)
+    if not game_exists:
+        raise GameError(message="Game don't exists")
+
+    return 'Game exists!'
+
+    #city_name = get_new_answer(message)
+    #print(city_name)
+    #city_info = db.bot.cities.find_one({'city': city_name})
+    #hint = f"Город из {len(city_info['city'])} букв, располежнный в {city_info['state']} {city_info['region']} региона с население из {city_info['population']} человек"
+
+    #return hint
 
 def get_score(chat_id: int) -> int:
     db = mongo.connect()
