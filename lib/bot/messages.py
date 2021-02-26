@@ -1,7 +1,7 @@
 import logging
 from . import commands
-from .game import cities
-from .game import CityGame
+from lib.game import cities
+from lib.game import CityGame
 from lib import helpers
 
 

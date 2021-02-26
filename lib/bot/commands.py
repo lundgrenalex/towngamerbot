@@ -2,8 +2,8 @@ import re
 import json
 import logging
 from lib import helpers
-from .game import cities
-from .game import CityGame
+from lib.game import cities
+from lib.game import CityGame
 
 
 def process(message: dict):
