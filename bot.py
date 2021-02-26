@@ -1,10 +1,9 @@
 import requests
 import time
 from lib.messages.telegram import TelegramBotApi
+from config import telegram_key as token
 from lib.bot import updates
 import logging
-
-from config import telegram_key as token
 
 updates_offset = 0
 

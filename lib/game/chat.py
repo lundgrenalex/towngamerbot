@@ -1,5 +1,5 @@
-from lib.messages import telegram
-from config import telegram_key
+from lib.messages.telegram import TelegramBotApi
+from config import telegram_key as token
 
 
 class Chat:
@@ -8,7 +8,5 @@ class Chat:
         self.chat_id = chat_id
 
     def message(self, message):
-        return telegram.send_message(
-            self.chat_id,
-            message=message,
-            bot_token=telegram_key)
+        bot_api = TelegramBotApi(token)
+        return bot_api.send_message(self.chat_id, message=message)

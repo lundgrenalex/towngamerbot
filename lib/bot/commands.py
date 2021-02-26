@@ -6,7 +6,7 @@ from lib.game import cities
 from lib.game import CityGame
 
 
-def process(message: dict):
+def process(message: dict) -> None:
     start(message)
     stop(message)
     hint(message)

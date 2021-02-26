@@ -3,20 +3,22 @@ import logging
 from lib.storage import mongo
 
 
-def get_random():
-    db = mongo.connect()
-    cities = db.bot.cities.distinct('city')
-    return random.choice([c for c in cities])
+class City(object):
 
-def get_all():
-    db = mongo.connect()
-    cities = db.bot.cities.distinct('city')
-    return [c.lower() for c in cities]
+    def __init__(self):
+        self.db = mongo.connect()
 
-def city_exists(city: str) -> bool:
-    db = mongo.connect()
-    city = db.bot.cities.find_one({'city': {
-        '$regex': f'^{city}$',
-        '$options' : 'i'
-    }})
-    return True if city else False
+    def random(self):
+        cities = self.db.bot.cities.distinct('city')
+        return random.choice([c for c in cities])
+
+    def get_all(self):
+        cities = self.db.bot.cities.distinct('city')
+        return [c.lower() for c in cities]
+
+    def exists(self, city: str) -> bool:
+        city = self.db.bot.cities.find_one({'city': {
+            '$regex': f'^{city}$',
+            '$options' : 'i'
+        }})
+        return True if city else False
