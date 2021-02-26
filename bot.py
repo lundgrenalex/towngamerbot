@@ -1,10 +1,10 @@
 import requests
 import time
-from lib.messages import telegram
+from lib.messages.telegram import TelegramBotApi
 from lib.bot import updates
-from config import telegram_key
 import logging
 
+from config import telegram_key as token
 
 updates_offset = 0
 
@@ -16,12 +16,14 @@ logging.basicConfig(
 logging.getLogger("requests").setLevel(logging.WARNING)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 
+# Init telegram bot connection
+bot_api = TelegramBotApi(token)
 
 while True:
 
     try:
         params = {} if updates_offset == 0 else {'offset': updates_offset}
-        _updates = telegram.get_updates(params, bot_token=telegram_key)['result']
+        _updates = bot_api.get_updates(params)['result']
     except KeyError:
         logging.error('Without updates!')
         time.sleep(0.5)
