@@ -2,6 +2,8 @@ import logging
 
 from src.adapters.telegram.commands import TelegramCommand
 from src.libs import helpers
+from src.domain.answer import Answer
+from src.repositories.answer import AnswerRepository
 from src.repositories.city import City
 from src.repositories.game import CityGame
 
@@ -11,6 +13,7 @@ class TelegramMessage:
     def __init__(self, message: dict):
         self.message = message
         self.game = CityGame(message=self.message)
+        self.answer_repository = AnswerRepository()
 
     def is_command(self) -> bool:
         if 'entities' not in self.message['message']:
@@ -42,10 +45,13 @@ class TelegramMessage:
 
             return False
 
-        result = self.game.chat.message(bot_answer)
+        message_status = self.game.chat.message(bot_answer)
 
         # write bot answer
-        result = self.game.save_bot_answer(result)
+        result = self.answer_repository.save(Answer(
+            chat_id=message_status['result']['chat']['id'],
+            user_id=message_status['result']['from']['id'],
+            message=message_status['result']['text']))
         logging.info(result)
 
         return True
@@ -90,7 +96,11 @@ class TelegramMessage:
             return False
 
         # save user answer
-        self.game.save_user_answer()
+        self.answer_repository.save(Answer(
+            chat_id=self.message['message']['chat']['id'],
+            user_id=self.message['message']['from']['id'],
+            message=self.message['message']['text'],
+        ))
 
         # send bot answer
         self.send_bot_answer()

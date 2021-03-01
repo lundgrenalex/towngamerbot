@@ -12,30 +12,14 @@ from src.repositories.exceptions import GameError
 
 class CityGame:
 
-    def __init__(self, message:dict):
+    def __init__(self, message: dict):
         self.message = message
         self.db = mongo.connect()
         self.chat = Chat(chat_id=message['message']['chat']['id'])
 
-    def exists(self,):
+    def exists(self):
         return self.db.bot.game.find_one({
             'chat_id': self.message['message']['chat']['id'],
-        })
-
-    def save_bot_answer(self, answer: dict):
-        return self.db.bot.game.insert_one({
-            'date': time.time(),
-            'chat_id': answer['result']['chat']['id'],
-            'user_id': answer['result']['from']['id'],
-            'message': answer['result']['text'],
-        })
-
-    def save_user_answer(self):
-        return self.db.bot.game.insert_one({
-            'date': time.time(),
-            'chat_id': self.message['message']['chat']['id'],
-            'user_id': self.message['message']['from']['id'],
-            'message': self.message['message']['text'],
         })
 
     def cancel(self):

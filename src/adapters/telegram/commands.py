@@ -4,6 +4,8 @@ import logging
 from src.libs import helpers
 from src.repositories.city import City
 from src.repositories.game import CityGame
+from src.domain.answer import Answer
+from src.repositories.answer import AnswerRepository
 
 
 class TelegramCommand:
@@ -11,6 +13,7 @@ class TelegramCommand:
     def __init__(self, message: dict):
         self.message = message
         self.text = message['message']['text']
+        self.answer_repository = AnswerRepository()
         self.game = CityGame(message=self.message)
 
     def process(self) -> None:
@@ -49,11 +52,14 @@ class TelegramCommand:
         city = City().random()
 
         # send_message
-        result = self.game.chat.message(city)
-        logging.info(result)
+        message_status = self.game.chat.message(city)
+        logging.info(message_status)
 
         # write bot answer
-        result = self.game.save_bot_answer(result)
+        result = self.answer_repository.save(Answer(
+            chat_id=message_status['result']['chat']['id'],
+            user_id=message_status['result']['from']['id'],
+            message=message_status['result']['text']))
         logging.info(result)
 
         return

@@ -1,6 +1,5 @@
-from src.infrastructure import mongo
-from .domain import Answer
 from src.storage import mongo
+from src.domain.answer import Answer
 
 
 class AnswerRepository:
