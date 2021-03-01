@@ -1,6 +1,6 @@
 import random
 import logging
-from src.storage import mongo
+from src.drivers import mongo
 
 
 class City:

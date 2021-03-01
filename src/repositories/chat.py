@@ -1,4 +1,4 @@
-from src.services.telegram import TelegramBotApi
+from src.drivers.telegram import TelegramBotApi
 from src.settings.config import telegram_key as token
 
 

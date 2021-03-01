@@ -1,4 +1,4 @@
-from src.storage import mongo
+from src.drivers import mongo
 from src.domain.answer import Answer
 
 

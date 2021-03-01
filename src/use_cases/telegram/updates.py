@@ -2,7 +2,7 @@ import time
 import logging
 import requests
 
-from src.services.telegram import TelegramBotApi
+from src.drivers.telegram import TelegramBotApi
 from src.use_cases.telegram.messages import TelegramMessage
 from src.settings.config import telegram_key as token
 from . import callbacks

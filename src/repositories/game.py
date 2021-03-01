@@ -5,7 +5,7 @@ import time
 import re
 
 from src.libs import helpers
-from src.storage import mongo
+from src.drivers import mongo
 from src.repositories.chat import Chat
 from src.repositories.exceptions import GameError
 
