@@ -2,7 +2,7 @@ import requests
 import logging
 import time
 
-from src.adapters.telegram.updates import TelegramUpdates
+from src.use_cases.telegram.updates import TelegramUpdates
 
 logging.basicConfig(
     format='%(asctime)-15s %(levelname)-8s %(name)-1s: %(message)s',
