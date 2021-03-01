@@ -8,10 +8,10 @@ from src.repositories.game import CityGame
 
 class TelegramCommand:
 
-    def __init__(message: dict):
+    def __init__(self, message: dict):
         self.message = message
+        self.text = message['message']['text']
         self.game = CityGame(message=self.message)
-        self.process()
 
     def process(self) -> None:
         self.start()
@@ -20,7 +20,7 @@ class TelegramCommand:
 
     def stop(self) -> None:
 
-        if not re.search(r'\/stop', self.message['message']['text']):
+        if not re.search(r'\/stop', self.text):
             return
 
         if not self.game.exists():
@@ -38,7 +38,7 @@ class TelegramCommand:
 
     def start(self):
 
-        if not re.search(r'\/start', self.message['message']['text']):
+        if not re.search(r'\/start', self.text):
             return
 
         if self.game.exists():
@@ -46,7 +46,7 @@ class TelegramCommand:
             return
 
         # Get random city
-        city = cities.get_random()
+        city = City().random()
 
         # send_message
         result = self.game.chat.message(city)
@@ -60,7 +60,7 @@ class TelegramCommand:
 
     def hint(self):
 
-        if not re.search(r'\/hint', self.message['message']['text']):
+        if not re.search(r'\/hint', self.text):
             return
 
         return self.game.chat.message(self.game.get_hint())

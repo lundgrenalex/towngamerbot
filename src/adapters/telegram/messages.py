@@ -8,10 +8,9 @@ from src.repositories.game import CityGame
 
 class TelegramMessage:
 
-    def __init__(message: dict):
+    def __init__(self, message: dict):
         self.message = message
         self.game = CityGame(message=self.message)
-        self.process()
 
     def is_command(self) -> bool:
         if 'entities' not in self.message['message']:
@@ -22,7 +21,7 @@ class TelegramMessage:
         return False
 
     def process(self):
-        if is_command(self.message):
+        if self.is_command():
             return TelegramCommand(self.message).process()
         self.process_message()
 
@@ -81,12 +80,12 @@ class TelegramMessage:
 
         # check last symbol from last answer
         if not helpers.is_word_in_chain(last_answer['message'], city):
-            err_msg = f"Ваш город {message['message']['text']} не начинается с последнего символа предыдущего города {last_answer['message']} из ответов"
+            err_msg = f"Ваш город {self.message['message']['text']} не начинается с последнего символа предыдущего города {last_answer['message']} из ответов"
             self.game.chat.message(err_msg)
             return False
 
         # city exists
-        if not cities.city_exists(city):
+        if not City().exists(city):
             self.game.chat.message(f'Города {city} не существует!')
             return False
 
