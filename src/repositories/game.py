@@ -1,12 +1,14 @@
+import logging
 import pymongo
 import random
-from lib.storage import mongo
-from .chat import Chat
-from .exceptions import GameError
-from lib import helpers
 import time
 import re
-import logging
+
+from src.libs import helpers
+from src.storage import mongo
+from src.repositories.chat import Chat
+from src.repositories.exceptions import GameError
+
 
 class CityGame:
 

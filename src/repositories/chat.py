@@ -1,5 +1,5 @@
-from lib.messages.telegram import TelegramBotApi
-from config import telegram_key as token
+from src.services.telegram import TelegramBotApi
+from src.settings.config import telegram_key as token
 
 
 class Chat:

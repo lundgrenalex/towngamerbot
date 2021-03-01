@@ -34,7 +34,6 @@ config_local.py
 config_logging_local.py
 frontend/local/static/scripts/*
 frontend/local/static/styles/*
-src/
 logs/
 venv/
 celerybeat-schedule*

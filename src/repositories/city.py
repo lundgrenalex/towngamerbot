@@ -1,9 +1,9 @@
 import random
 import logging
-from lib.storage import mongo
+from src.storage import mongo
 
 
-class City(object):
+class City:
 
     def __init__(self):
         self.db = mongo.connect()
