@@ -9,7 +9,7 @@ WORKDIR /app
 ENV PYTHONPATH /app
 RUN pip3 install --upgrade pip && pip3 install flake8
 #RUN flake8 .
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r etc/requirements.txt
 RUN chmod +x run.sh
 
 ENTRYPOINT ["/app/run.sh"]
