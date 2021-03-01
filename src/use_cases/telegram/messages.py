@@ -56,7 +56,6 @@ class TelegramMessage:
 
         return True
 
-
     def process_message(self):
 
         # get current city
@@ -86,7 +85,11 @@ class TelegramMessage:
 
         # check last symbol from last answer
         if not helpers.is_word_in_chain(last_answer['message'], city):
-            err_msg = f"Ваш город {self.message['message']['text']} не начинается с последнего символа предыдущего города {last_answer['message']} из ответов"
+            err_msg = f"""
+            Ваш город {self.message['message']['text']} не начинается
+            с последнего символа предыдущего города
+            {last_answer['message']} из ответов
+            """
             self.game.chat.message(err_msg)
             return False
 

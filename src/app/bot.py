@@ -1,6 +1,4 @@
-import requests
 import logging
-import time
 
 from src.use_cases.telegram.updates import TelegramUpdates
 

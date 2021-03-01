@@ -1,12 +1,12 @@
 import time
 import logging
-import requests
+from requests.exceptions import ReadTimeout, ConnectionError
 
 from src.drivers.telegram import TelegramBotApi
 from src.use_cases.telegram.messages import TelegramMessage
 from src.settings.config import telegram_key as token
 from . import callbacks
-from . import messages
+
 
 class TelegramUpdates:
 
@@ -24,14 +24,12 @@ class TelegramUpdates:
                 logging.error('Without updates!')
                 time.sleep(0.5)
                 continue
-            except (
-                requests.exceptions.ReadTimeout,
-                requests.exceptions.ConnectionError):
+            except (ReadTimeout, ConnectionError):
                 logging.error('api.telegram.org read timed out!')
                 time.sleep(0.5)
                 continue
 
-            _updates = sorted(_updates, key = lambda i: i['update_id'])
+            _updates = sorted(_updates, key=lambda i: i['update_id'])
 
             try:
                 self.offset = int(_updates[-1:][0]['update_id']) + 1

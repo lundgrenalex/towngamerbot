@@ -1,5 +1,4 @@
 import random
-import logging
 from src.drivers import mongo
 
 
@@ -19,6 +18,6 @@ class City:
     def exists(self, city: str) -> bool:
         city = self.db.bot.cities.find_one({'city': {
             '$regex': f'^{city}$',
-            '$options' : 'i'
+            '$options': 'i'
         }})
         return True if city else False

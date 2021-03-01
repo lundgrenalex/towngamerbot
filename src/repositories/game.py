@@ -1,13 +1,10 @@
 import logging
 import pymongo
-import random
-import time
-import re
 
 from src.libs import helpers
 from src.drivers import mongo
 from src.repositories.chat import Chat
-from src.repositories.exceptions import GameError
+# from src.repositories.exceptions import GameError
 
 
 class CityGame:
@@ -31,7 +28,7 @@ class CityGame:
             'chat_id': self.message['message']['chat']['id'],
             'message': {
                 '$regex': f"{self.message['message']['text']}",
-                '$options' : 'i'
+                '$options': 'i'
             }
         })
         return result
@@ -53,8 +50,9 @@ class CityGame:
         cities = self.db.bot.cities.find({
             'city': {
                 '$regex': f'^{last_simbol}',
-                '$options' : 'i'
-        }}).sort([('population', pymongo.DESCENDING)])
+                '$options': 'i'}}).sort([
+                    ('population', pymongo.DESCENDING)
+                ])
 
         # get answered cities
         answered_cities = self.db.bot.game.find({'chat_id': chat_id})
@@ -68,7 +66,7 @@ class CityGame:
     def get_hint(self):
 
         if not self.exists():
-            message="Game doesn't exists!"
+            message = "Game doesn't exists!"
             # raise GameError(message="Game doesn't exists!")
             logging.error(message)
             return
@@ -83,7 +81,7 @@ class CityGame:
         # get keys
         for a in answers:
             score += (1 / self.db.bot.cities.count({
-                'city': {'$regex': f'^{a[0]}', '$options' : 'i'}}))
+                'city': {'$regex': f'^{a[0]}', '$options': 'i'}}))
 
         # return real score
         return int(score * 1000)

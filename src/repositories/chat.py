@@ -4,7 +4,7 @@ from src.settings.config import telegram_key as token
 
 class Chat:
 
-    def __init__(self, chat_id:int = ""):
+    def __init__(self, chat_id: int = ""):
         self.chat_id = chat_id
 
     def message(self, message):

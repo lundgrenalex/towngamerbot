@@ -1,5 +1,4 @@
 import re
-import json
 import logging
 from src.libs import helpers
 from src.repositories.city import City
@@ -38,9 +37,7 @@ class TelegramCommand:
         # Cancel game
         self.game.cancel()
 
-
     def start(self):
-
         if not re.search(r'\/start', self.text):
             return
 
