@@ -18,7 +18,7 @@ deploy: update; docker-compose build --parallel --compress; docker-compose up -d
 
 install_requirements:
 	@echo "Install requirements.txt:"
-	$(VIRTUALENV_NAME)/bin/pip3 install -r etc/requirements.txt
+	$(VIRTUALENV_NAME)/bin/pip3 install -r ./etc/requirements.txt
 
 create_venv:
 	@echo "Creating virtual env:"

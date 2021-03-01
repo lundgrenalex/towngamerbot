@@ -1,2 +1,5 @@
 requests
 pymongo
+coverage
+flake8
+nose2
