@@ -1,1 +1,1 @@
-from .observer import *
+from .observer import *  # noqa

@@ -8,6 +8,7 @@ class Observer(metaclass=ABCMeta):
     def add(self, message: str) -> None:
         pass
 
+
 class Observable(metaclass=ABCMeta):
 
     observers = {}

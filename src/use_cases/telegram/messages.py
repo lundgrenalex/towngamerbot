@@ -1,6 +1,5 @@
 import logging
 
-from src.use_cases.telegram.commands import TelegramCommand
 from src.libs import helpers
 from src.domain.answer import Answer
 from src.repositories.answer import AnswerRepository
