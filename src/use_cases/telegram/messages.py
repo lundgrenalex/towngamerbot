@@ -6,27 +6,16 @@ from src.domain.answer import Answer
 from src.repositories.answer import AnswerRepository
 from src.repositories.city import City
 from src.repositories.game import CityGame
+from src.libs.observer import Observer
 
 
-class TelegramMessage:
+class TelegramMessage(Observer):
 
-    def __init__(self, message: dict):
+    def add(self, message: dict):
+        self.answer_repository = AnswerRepository()
         self.message = message
         self.game = CityGame(message=self.message)
-        self.answer_repository = AnswerRepository()
-
-    def is_command(self) -> bool:
-        if 'entities' not in self.message['message']:
-            return False
-        for entity in self.message['message']['entities']:
-            if entity['type'] == 'bot_command':
-                return True
-        return False
-
-    def process(self):
-        if self.is_command():
-            return TelegramCommand(self.message).process()
-        self.process_message()
+        self.process_user_message()
 
     def send_bot_answer(self):
 
@@ -56,7 +45,7 @@ class TelegramMessage:
 
         return True
 
-    def process_message(self):
+    def process_user_message(self):
 
         # get current city
         city = self.message['message']['text']

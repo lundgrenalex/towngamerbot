@@ -5,25 +5,25 @@ from src.repositories.city import City
 from src.repositories.game import CityGame
 from src.domain.answer import Answer
 from src.repositories.answer import AnswerRepository
+from src.libs.observer import Observer
 
 
-class TelegramCommand:
+class TelegramCommand(Observer):
 
-    def __init__(self, message: dict):
+    def add(self, message: str) -> None:
         self.message = message
         self.text = message['message']['text']
         self.answer_repository = AnswerRepository()
         self.game = CityGame(message=self.message)
+        self.process_command(self.message['meta']['command'])
 
-    def process(self) -> None:
-        self.start()
-        self.stop()
-        self.hint()
+    def process_command(self, name: str):
+        try:
+            return getattr(self, name)()
+        except AttributeError:
+            logging.error(f'Command /{name} not found!')
 
     def stop(self) -> None:
-
-        if not re.search(r'\/stop', self.text):
-            return
 
         if not self.game.exists():
             self.game.chat.message('Вы еще не начали, нажмите /start чтобы начать играть в города!')
@@ -38,8 +38,6 @@ class TelegramCommand:
         self.game.cancel()
 
     def start(self):
-        if not re.search(r'\/start', self.text):
-            return
 
         if self.game.exists():
             self.game.chat.message('Вы еще не закончили последнюю игру, нажмите /stop или говорите город!')
@@ -62,8 +60,4 @@ class TelegramCommand:
         return
 
     def hint(self):
-
-        if not re.search(r'\/hint', self.text):
-            return
-
         return self.game.chat.message(self.game.get_hint())
