@@ -1,5 +1,3 @@
-import logging
-
 from src.libs import helpers
 from src.domain.answer import Answer
 from src.repositories.answer import AnswerRepository
