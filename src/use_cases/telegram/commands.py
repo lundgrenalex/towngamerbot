@@ -29,12 +29,10 @@ class TelegramCommand(Observer):
             self.game.chat.message('Вы еще не начали, нажмите /start чтобы начать играть в города!')
             return
 
-        # Get score for username and send message
         score = int(self.game.get_score() * 0.75)
         self.game.chat.message(helpers.render_template(
             'stopped', self.message['message']['chat']['username'], score))
 
-        # Cancel game
         self.game.cancel()
 
     def start(self):
@@ -43,14 +41,11 @@ class TelegramCommand(Observer):
             self.game.chat.message('Вы еще не закончили последнюю игру, нажмите /stop или говорите город!')
             return
 
-        # Get random city
         city = City().random()
 
-        # send_message
         message_status = self.game.chat.message(city)
         logging.info(message_status)
 
-        # write bot answer
         result = self.answer_repository.save(Answer(
             chat_id=message_status['result']['chat']['id'],
             user_id=message_status['result']['from']['id'],
