@@ -13,7 +13,7 @@ class TelegramMessageObservable(metaclass=ABCMeta):
 
     observers = {}
 
-    def register_observer(self, observer_type: str, observer: Observer) -> None:
+    def register_observer(self, observer_type: str, observer: TelegramMessageObserver) -> None:
         if observer_type not in self.observers:
             self.observers[observer_type] = []
         self.observers[observer_type].append(observer)
