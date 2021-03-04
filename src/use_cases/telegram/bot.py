@@ -1,13 +1,13 @@
 import time
 from requests.exceptions import ReadTimeout, ConnectionError
 
-from src.libs.observer import Observable
+from src.libs.telegram import TelegramMessageObservable
 from src.drivers.telegram import TelegramBotApi
 from src.adapters.telegram import TelegramMessageAdapter
 from src.settings.config import telegram_key as token
 
 
-class TelegramBot(Observable):
+class TelegramBot(TelegramMessageObservable):
 
     def __init__(self):
         self.offset = 0

@@ -1,12 +1,12 @@
 from src.libs import helpers
 from src.domain.answer import Answer
-from src.repositories.answer import AnswerRepository
 from src.repositories.city import City
 from src.repositories.game import CityGame
-from src.libs.observer import Observer
+from src.repositories.answer import AnswerRepository
+from src.libs.telegram import TelegramMessageObserver
 
 
-class TelegramMessage(Observer):
+class TelegramMessage(TelegramMessageObserver):
 
     def add(self, message: dict):
         self.message = message

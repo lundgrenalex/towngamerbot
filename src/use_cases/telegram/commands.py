@@ -5,10 +5,10 @@ from src.repositories.city import City
 from src.repositories.game import CityGame
 from src.domain.answer import Answer
 from src.repositories.answer import AnswerRepository
-from src.libs.observer import Observer
+from src.libs.telegram import TelegramMessageObserver
 
 
-class TelegramCommand(Observer):
+class TelegramCommand(TelegramMessageObserver):
 
     def add(self, message: str) -> None:
         self.message = message

@@ -2,14 +2,14 @@ from abc import ABCMeta, abstractmethod
 from .exceptions import ObserverNotFound
 
 
-class Observer(metaclass=ABCMeta):
+class TelegramMessageObserver(metaclass=ABCMeta):
 
     @abstractmethod
     def add(self, message: str) -> None:
         pass
 
 
-class Observable(metaclass=ABCMeta):
+class TelegramMessageObservable(metaclass=ABCMeta):
 
     observers = {}
 
