@@ -3,7 +3,7 @@ from src.repositories.city import CityRepositoRy
 from src.repositories.game import GameRepository
 
 city_store = CityRepositoRy()
-game_store = GameRepository()
+game_store = GameRepository(message={})
 
 # Remove old cities
 city_store.drop_all()
