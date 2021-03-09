@@ -9,12 +9,14 @@ from src.repositories.chat import Chat
 
 class GameRepository:
 
-    def add_indexes(self):
+    @staticmethod
+    def add_indexes():
         result = []
-        result.append(self.db.bot.game.create_index('date'))
-        result.append(self.db.bot.game.create_index('chat_id'))
-        result.append(self.db.bot.game.create_index('user_id'))
-        result.append(self.db.bot.game.create_index('message'))
+        db = mongo.connect()
+        result.append(db.bot.game.create_index('date'))
+        result.append(db.bot.game.create_index('chat_id'))
+        result.append(db.bot.game.create_index('user_id'))
+        result.append(db.bot.game.create_index('message'))
         return result
 
     def __init__(self, message: dict):
