@@ -1,7 +1,7 @@
 from src.libs import helpers
 from src.domain.answer import Answer
-from src.repositories.city import City
-from src.repositories.game import CityGame
+from src.repositories.city import CityRepositoRy
+from src.repositories.game import GameRepository
 from src.repositories.answer import AnswerRepository
 from src.libs.telegram import TelegramMessageObserver
 
@@ -11,7 +11,7 @@ class TelegramMessage(TelegramMessageObserver):
     def add(self, message: dict):
         self.message = message
         self.answer_repository = AnswerRepository()
-        self.game = CityGame(message=self.message)
+        self.game = GameRepository(message=self.message)
         self.process_user_message()
 
     def send_bot_answer(self) -> None:
@@ -60,7 +60,7 @@ class TelegramMessage(TelegramMessageObserver):
                     last_answer['message']))
             return
 
-        if not City().exists(city):
+        if not CityRepositoRy().exists(city):
             self.game.chat.message(f'Города {city} не существует!')
             return
 

@@ -1,8 +1,8 @@
 import logging
 
 from src.libs import helpers
-from src.repositories.city import City
-from src.repositories.game import CityGame
+from src.repositories.city import CityRepositoRy
+from src.repositories.game import GameRepository
 from src.domain.answer import Answer
 from src.repositories.answer import AnswerRepository
 from src.libs.telegram import TelegramMessageObserver
@@ -14,7 +14,7 @@ class TelegramCommand(TelegramMessageObserver):
         self.message = message
         self.text = message['message']['text']
         self.answer_repository = AnswerRepository()
-        self.game = CityGame(message=self.message)
+        self.game = GameRepository(message=self.message)
         self.process_command(self.message['meta']['command'])
 
     def process_command(self, name: str):
@@ -41,7 +41,7 @@ class TelegramCommand(TelegramMessageObserver):
             self.game.chat.message('Вы еще не закончили последнюю игру, нажмите /stop или говорите город!')
             return
 
-        city = City().random()
+        city = CityRepositoRy().random()
 
         message_status = self.game.chat.message(city)
         logging.info(message_status)

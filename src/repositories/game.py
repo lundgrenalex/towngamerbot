@@ -7,7 +7,15 @@ from src.repositories.chat import Chat
 # from src.repositories.exceptions import GameError
 
 
-class CityGame:
+class GameRepository:
+
+    def add_indexes(self):
+        result = []
+        result.append(self.db.bot.game.create_index('date'))
+        result.append(self.db.bot.game.create_index('chat_id'))
+        result.append(self.db.bot.game.create_index('user_id'))
+        result.append(self.db.bot.game.create_index('message'))
+        return result
 
     def __init__(self, message: dict):
         self.message = message

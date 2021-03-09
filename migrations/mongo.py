@@ -1,35 +1,21 @@
-import json
-from pymongo import MongoClient, ASCENDING, DESCENDING
+from src.domain.city import City
+from src.repositories.city import CityRepositoRy
+from src.repositories.game import GameRepository
 
-db = MongoClient('mongodb://mongodb:27017')
+city_store = CityRepositoRy()
+game_store = GameRepository()
 
-# CITIES
-db.bot.cities.delete_many({})
+# Remove old cities
+city_store.drop_all()
+
+# add_indexes to game, city stores
+game_store.add_indexes()
+city_store.add_indexes()
 
 with open('./data/cities.csv', 'r') as city_file:
     city_lines = city_file.readlines()
     cities = []
     for cl in city_lines:
         cl = cl.replace('\n', '').split(';')
-        city = {
-            'city': cl[0],
-            'state': cl[1],
-            'region': cl[2],
-            'population': cl[3],
-        }
-        cities.append(city)
-    db.bot.cities.insert_many(cities)
-
-cities = db.bot.cities.distinct('city')
-print(cities)
-
-# GAME
-result = []
-
-result.append(db.bot.game.create_index('date'))
-result.append(db.bot.game.create_index('chat_id'))
-result.append(db.bot.game.create_index('user_id'))
-result.append(db.bot.game.create_index('message'))
-result.append(db.bot.cities.create_index('city'))
-
-print(result)
+        cities.append(City(city=cl[0], state=cl[1], region=cl[2], population=cl[3]))
+    city_store.insert(cities)
